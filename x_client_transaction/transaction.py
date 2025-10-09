@@ -16,9 +16,13 @@ from .constants import INDICES_REGEX, ADDITIONAL_RANDOM_NUMBER, DEFAULT_KEYWORD
 
 class ClientTransaction:
 
-    def __init__(self, home_page_response: bs4.BeautifulSoup, ondemand_file_response: bs4.BeautifulSoup, random_keyword: Optional[str] = None, random_number: Optional[int] = None):
+    def __init__(self, home_page_response: bs4.BeautifulSoup, ondemand_file_response: Union[bs4.BeautifulSoup, str], random_keyword: Optional[str] = None, random_number: Optional[int] = None):
         validate_response(home_page_response)
-        validate_response(ondemand_file_response)
+        # validate_response(ondemand_file_response)
+        if hasattr(ondemand_file_response, "text"):
+            ondemand_file_response = ondemand_file_response.text
+        if not isinstance(ondemand_file_response, str):
+            raise TypeError(f"invalid ondemand file response")
         self.home_page_response = home_page_response
         self.ondemand_file_response = ondemand_file_response
         self.random_keyword = random_keyword or DEFAULT_KEYWORD
@@ -30,10 +34,10 @@ class ClientTransaction:
         self.animation_key = self.get_animation_key(
             key_bytes=self.key_bytes, home_page_response=self.home_page_response)
 
-    def get_indices(self, ondemand_file_response: bs4.BeautifulSoup):
+    def get_indices(self, ondemand_file_response: str):
         key_byte_indices = []
         key_byte_indices_match = INDICES_REGEX.finditer(
-            str(ondemand_file_response.text))
+            str(ondemand_file_response))
         for item in key_byte_indices_match:
             key_byte_indices.append(item.group(2))
         if not key_byte_indices:

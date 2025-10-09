@@ -59,7 +59,12 @@ home_page_response = bs4.BeautifulSoup(home_page.content, 'html.parser')
 # GET ondemand.s FILE RESPONSE
 ondemand_file_url = get_ondemand_file_url(response=home_page_response)
 ondemand_file = session.get(url=ondemand_file_url)
+
 ondemand_file_response = bs4.BeautifulSoup(ondemand_file.content, 'html.parser')
+# Getting "Couldn't get KEY_BYTE indices" error? Try passing the original response or the response text
+# both should work
+# ondemand_file_response = ondemand_file
+ondemand_file_response = ondemand_file.text
 ```
 
 #### Async Version
@@ -86,10 +91,15 @@ home_page_response = bs4.BeautifulSoup(home_page.content, 'html.parser')
 # GET ondemand.s FILE RESPONSE
 ondemand_file_url = get_ondemand_file_url(response=home_page_response)
 ondemand_file = await session.get(url=ondemand_file_url)
+
 ondemand_file_response = bs4.BeautifulSoup(ondemand_file.content, 'html.parser')
+# Getting "Couldn't get KEY_BYTE indices" error? Try passing the original response or the response text
+# both should work
+# ondemand_file_response = ondemand_file
+ondemand_file_response = ondemand_file.text
 ```
 
-## Generate X-Client-Transaction-I (tid):
+## Generate X-Client-Transaction-Id (tid):
 
 ```python
 from urllib.parse import urlparse
