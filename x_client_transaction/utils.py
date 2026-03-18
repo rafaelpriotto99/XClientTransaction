@@ -1,9 +1,11 @@
-import re
-import bs4
-import math
 import base64
+import math
+import re
 from typing import Union
-from .constants import MIGRATION_REDIRECTION_REGEX, ON_DEMAND_FILE_REGEX, ON_DEMAND_FILE_URL
+
+import bs4
+
+from .constants import MIGRATION_REDIRECTION_REGEX, ON_DEMAND_FILE_REGEX, ON_DEMAND_FILE_URL, ON_DEMAND_HASH_PATTERN
 
 
 class Math:
@@ -55,12 +57,9 @@ def get_migration_form(response: bs4.BeautifulSoup):
 
 def get_ondemand_file_url(response: bs4.BeautifulSoup):
     on_demand_file_index = ON_DEMAND_FILE_REGEX.search(str(response)).group(1)
-    regex = re.compile(
-        rf',{on_demand_file_index}:\"(?!.*ondemand\.s)(.*?)\"'
-    )
+    regex = re.compile(ON_DEMAND_HASH_PATTERN.format(on_demand_file_index))
     filename = regex.search(str(response)).group(1)
-    file_url = ON_DEMAND_FILE_URL.format(filename=filename)
-    return file_url
+    return ON_DEMAND_FILE_URL.format(filename=filename)
 
 
 def handle_x_migration(session):
