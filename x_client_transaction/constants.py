@@ -5,7 +5,8 @@ DEFAULT_KEYWORD: str = "obfiowerehiring"
 
 ON_DEMAND_FILE_URL: str = "https://abs.twimg.com/responsive-web/client-web/ondemand.s.{filename}a.js"
 ON_DEMAND_FILE_REGEX: re.Pattern = re.compile(
-    r"""['|\"]{1}ondemand\.s['|\"]{1}:\s*['|\"]{1}([\w]*)['|\"]{1}""", flags=(re.VERBOSE | re.MULTILINE))
+    r""",(\d+):["']ondemand\.s["']""", flags=(re.VERBOSE | re.MULTILINE))
+ON_DEMAND_HASH_PATTERN: str = r',{}:\"([0-9a-f]+)\"'
 
 INDICES_REGEX: re.Pattern = re.compile(
     r"""(\(\w{1}\[(\d{1,2})\],\s*16\))+""", flags=(re.VERBOSE | re.MULTILINE))
